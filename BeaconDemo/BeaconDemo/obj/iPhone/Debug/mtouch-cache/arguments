@@ -1,0 +1,27 @@
+# Version: 7.2.3.39 (fc6f56b)
+# [first argument, ignore] # /Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/bin/iPhone/Debug/mtouch.exe
+/Developer/MonoTouch/usr/bin/mtouch \
+	-sdkroot \
+	/Applications/Xcode.app/Contents/Developer \
+	--cache \
+	/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache \
+	--nomanifest \
+	--nosign \
+	-dev \
+	/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/bin/iPhone/Debug/BeaconDemo.app \
+	-r \
+	/Developer/MonoTouch/usr/lib/mono/2.1/System.dll \
+	-r \
+	/Developer/MonoTouch/usr/lib/mono/2.1/System.Xml.dll \
+	-r \
+	/Developer/MonoTouch/usr/lib/mono/2.1/System.Core.dll \
+	-r \
+	/Developer/MonoTouch/usr/lib/mono/2.1/monotouch.dll \
+	-debug \
+	-linksdkonly \
+	-sdk \
+	7.1 \
+	-targetver \
+	7.0 \
+	--abi=armv7 \
+	/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/bin/iPhone/Debug/BeaconDemo.exe \
