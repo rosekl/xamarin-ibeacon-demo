@@ -1,5 +1,0 @@
-/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache/Link/monotouch.dll
-/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache/Link/System.dll
-/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache/Link/BeaconDemo.exe
-/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache/Link/mscorlib.dll
-/Users/katier/slalom-ibeacondemo-xamarin/BeaconDemo/BeaconDemo/obj/iPhone/Debug/mtouch-cache/Link/System.Core.dll
