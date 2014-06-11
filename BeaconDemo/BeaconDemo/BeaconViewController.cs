@@ -5,7 +5,6 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.CoreLocation;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BeaconDemo
 {
@@ -16,12 +15,10 @@ namespace BeaconDemo
 		readonly string beaconId = "OfficeBeacon";
 		NSUuid beaconUUID;
 		CLBeaconRegion beaconRegion;
-		const int beaconA = 4033;
-		const int beaconB = 3998;
-		LimitedQueue<double> prevA;
-		LimitedQueue<double> prevB;
-		double prevAvgA = 0;
-		double prevAvgB = 0;
+		List<Beacon> beacons;
+
+		UITableView tableView;
+		BeaconTableSource tableSource;
 
 		public BeaconViewController (IntPtr handle) : base (handle)
 		{
@@ -31,18 +28,24 @@ namespace BeaconDemo
 		{
 			base.ViewDidLoad ();
 
+			SetupTable ();
 			SetupBeaconTracking ();
 
 			locationManager.StartMonitoring (beaconRegion);
 			locationManager.RequestState (beaconRegion);
-
-
 		}
 
-		private void SetupBeaconTracking() {
+		private void SetupTable() {
+			tableView = new UITableView (new RectangleF (0, TitleLabel.Frame.Bottom + 10, View.Bounds.Width, View.Bounds.Height - TitleLabel.Frame.Bottom + 10));
+			tableView.Source = tableSource = new BeaconTableSource ();
+
+			View.Add (tableView);
+		}
+
+		private void SetupBeaconTracking ()
+		{
 			locationManager = new CLLocationManager ();
-			prevA = new LimitedQueue<double> (5);
-			prevB = new LimitedQueue<double> (5);
+			beacons = new List<Beacon> ();
 
 			beaconUUID = new NSUuid (uuid);
 			beaconRegion = new CLBeaconRegion (beaconUUID, beaconId);
@@ -51,121 +54,58 @@ namespace BeaconDemo
 			beaconRegion.NotifyOnEntry = true;
 			beaconRegion.NotifyOnExit = true;
 
-			locationManager.RegionEntered += (sender, e) => {
-				Console.WriteLine("Region entered: " + e.Region.Identifier);
-				if (e.Region.Identifier.Equals(beaconId)) {
+			locationManager.RegionEntered += HandleRegionEntered;
+			locationManager.RegionLeft += HandleRegionLeft;
+			locationManager.DidDetermineState += HandleDidDetermineState;
+			locationManager.DidRangeBeacons += HandleDidRangeBeacons;
+		}
+
+		void HandleRegionLeft (object sender, CLRegionEventArgs e)
+		{
+			if (e.Region.Identifier.Equals (beaconId)) {
+				locationManager.StopRangingBeacons (beaconRegion);
+			}
+		}
+
+		void HandleRegionEntered (object sender, CLRegionEventArgs e)
+		{
+			Console.WriteLine ("Region entered: " + e.Region.Identifier);
+			if (e.Region.Identifier.Equals (beaconId)) {
+				locationManager.StartRangingBeacons (beaconRegion);
+			}
+		}
+
+		void HandleDidDetermineState (object sender, CLRegionStateDeterminedEventArgs e)
+		{
+			if (e.Region.Identifier.Equals (beaconId)) {
+				if (e.State == CLRegionState.Inside) {
+					Console.WriteLine ("Inside beacon region");
 					locationManager.StartRangingBeacons (beaconRegion);
+				} else if (e.State == CLRegionState.Outside) {
+					Console.WriteLine ("Outside beacon region");
+					locationManager.StopRangingBeacons (beaconRegion);
 				}
-			};
+			}
+		}
 
-			locationManager.RegionLeft += (sender, e) => {
-				if (e.Region.Identifier.Equals(beaconId)) {
-					locationManager.StopRangingBeacons(beaconRegion);
-				}
-			};
-
-			locationManager.DidDetermineState += (sender, e) => {
-				if (e.Region.Identifier.Equals(beaconId)) {
-					if (e.State == CLRegionState.Inside) {
-						Console.WriteLine("Inside beacon region");
-						locationManager.StartRangingBeacons(beaconRegion);
-					} else if (e.State == CLRegionState.Outside) {
-						Console.WriteLine("Outside beacon region");
-						locationManager.StopRangingBeacons(beaconRegion);
-					}
-				}
-			};
-
-			locationManager.DidRangeBeacons += (sender, e) => {
-
-				if (e.Beacons.Length > 0) {
-
-					foreach (var b in e.Beacons) {
-						if (b.Proximity != CLProximity.Unknown) {
-							UILabel beaconLabel = null;
-
-							LimitedQueue<double> queue = null;
-							double prevAvg = 0;
-
-							switch (b.Minor.IntValue) {
-							case beaconA:
-								beaconLabel = Label1;
-								queue = prevA;
-								prevAvg = prevAvgA;
-								break;
-							case beaconB:
-								beaconLabel = Label2;
-								queue = prevB;
-								prevAvg = prevAvgB;
-								break;
-							}
-
-							if (queue != null) {
-								queue.Enqueue (b.Accuracy);
-								double diff = 0;
-								if (Math.Abs (prevAvg) > 0.001) {
-									diff = prevAvg - queue.Average ();
-								}
-
-								switch (b.Minor.IntValue) {
-								case beaconA:
-									prevAvgA = queue.Average ();
-									break;
-								case beaconB:
-									prevAvgB = queue.Average ();
-									break;
-								}
-
-								string distanceText;
-								Console.WriteLine(diff);
-								if (Math.Abs(diff) < 0.1) {
-									distanceText = "Stationary";
-								} else if (diff > 0) {
-									distanceText = "Getting closer";
-								} else if (diff < 0) {
-									distanceText = "Moving away";
-								} else {
-									distanceText = "Unknown";
-								}
-
-								if (beaconLabel != null) {
-									beaconLabel.Text = "Beacon: " + b.Minor + "\nDistance (m): " + Math.Round (b.Accuracy, 2) + "\nProximity: " + b.Proximity
-										+ "\n" + distanceText;
-								}
-							}
-
-
+		void HandleDidRangeBeacons (object sender, CLRegionBeaconsRangedEventArgs e)
+		{
+			if (e.Beacons.Length > 0) {
+				foreach (var b in e.Beacons) {
+					if (b.Proximity != CLProximity.Unknown) {
+						var existing = beacons.Find (x => x.Minor == b.Minor.DoubleValue);
+						if (existing == null) {
+							beacons.Add (new Beacon () { Minor = b.Minor.DoubleValue, Name = "", CurrentDistance = Math.Round(b.Accuracy, 2) });
+							tableSource.SetTableData (beacons);
+							tableView.ReloadData ();
+						} else {
+							existing.CurrentDistance = Math.Round (b.Accuracy, 2);
 						}
 					}
 				}
-			};
-		}
 
-	}
 
-	public class LimitedQueue<T> : Queue<T>
-	{
-		private int limit = -1;
-
-		public int Limit
-		{
-			get { return limit; }
-			set { limit = value; }
-		}
-
-		public LimitedQueue(int limit)
-			: base(limit)
-		{
-			this.Limit = limit;
-		}
-
-		public new void Enqueue(T item)
-		{
-			if (this.Count >= this.Limit)
-			{
-				this.Dequeue();
 			}
-			base.Enqueue(item);
 		}
 	}
 }

@@ -16,21 +16,13 @@ namespace BeaconDemo
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel Label1 { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel Label2 { get; set; }
+		UILabel TitleLabel { get; set; }
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (Label1 != null) {
-				Label1.Dispose ();
-				Label1 = null;
-			}
-			if (Label2 != null) {
-				Label2.Dispose ();
-				Label2 = null;
+			if (TitleLabel != null) {
+				TitleLabel.Dispose ();
+				TitleLabel = null;
 			}
 		}
 	}
