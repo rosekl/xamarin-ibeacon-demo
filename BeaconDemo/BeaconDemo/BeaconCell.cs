@@ -28,9 +28,12 @@ namespace BeaconDemo
 
 			NameTextField.ShouldReturn += delegate {
 				NameTextField.ResignFirstResponder ();
-				b.Name = NameTextField.Text;
 				viewController.IsEditing = false;
 				return true;
+			};
+
+			NameTextField.EditingDidEnd += (sender, e) => {
+				b.Name = NameTextField.Text;
 			};
 
 			NameTextField.EditingDidBegin += (sender, e) => {

@@ -6,19 +6,30 @@ namespace BeaconDemo
 {
 	public class Beacon
 	{
-		public LimitedQueue<double> PreviousDistances;
+		LimitedQueue<double> previousDistances;
+
 		public double PreviousAverage;
 		public double Minor;
 		public string Name;
-		public double CurrentDistance;
+
+		public double CurrentDistance {
+			get { return previousDistances.Last (); }
+			set {
+				if (previousDistances != null && previousDistances.Count > 0) {
+					PreviousAverage = previousDistances.Average ();
+				}
+				previousDistances.Enqueue (value);
+			}
+		}
 
 		public Beacon ()
 		{
-			PreviousDistances = new LimitedQueue<double> (5);
+			previousDistances = new LimitedQueue<double> (5);
 		}
 
-		public double GetAverage() {
-			return PreviousDistances.Average ();
+		public double GetAverage ()
+		{
+			return previousDistances.Average ();
 		}
 	}
 
@@ -26,25 +37,23 @@ namespace BeaconDemo
 	{
 		private int limit = -1;
 
-		public int Limit
-		{
+		public int Limit {
 			get { return limit; }
 			set { limit = value; }
 		}
 
-		public LimitedQueue(int limit)
-			: base(limit)
+		public LimitedQueue (int limit)
+			: base (limit)
 		{
 			this.Limit = limit;
 		}
 
-		public new void Enqueue(T item)
+		public new void Enqueue (T item)
 		{
-			if (this.Count >= this.Limit)
-			{
-				this.Dequeue();
+			if (this.Count >= this.Limit) {
+				this.Dequeue ();
 			}
-			base.Enqueue(item);
+			base.Enqueue (item);
 		}
 	}
 }

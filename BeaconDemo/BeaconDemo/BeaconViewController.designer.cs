@@ -24,7 +24,7 @@ namespace BeaconDemo
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel TitleLabel { get; set; }
+		UIButton TrackingButton { get; set; }
 
 		void ReleaseDesignerOutlets ()
 		{
@@ -36,9 +36,9 @@ namespace BeaconDemo
 				SearchingLabel.Dispose ();
 				SearchingLabel = null;
 			}
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
+			if (TrackingButton != null) {
+				TrackingButton.Dispose ();
+				TrackingButton = null;
 			}
 		}
 	}

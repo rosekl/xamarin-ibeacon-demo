@@ -20,7 +20,7 @@ namespace BeaconDemo
 		UITableView tableView;
 		BeaconTableSource tableSource;
 
-		public bool IsEditing = false;
+		public bool IsEditing;
 
 		public BeaconViewController (IntPtr handle) : base (handle)
 		{
@@ -31,7 +31,16 @@ namespace BeaconDemo
 			base.ViewDidLoad ();
 
 			SetupTable ();
-			SetupBeaconTracking ();
+			SetupBeaconRanging ();
+			TrackingButton.Hidden = true;
+
+			TrackingButton.TouchUpInside += (sender, e) => {
+				var trackingController = Storyboard.InstantiateViewController("TrackingViewController") as TrackingViewController;
+				NavigationController.PushViewController(trackingController, true);
+
+				trackingController.SetupTracking(beacons, locationManager);
+				locationManager.DidRangeBeacons -= HandleDidRangeBeacons;
+			};
 
 			locationManager.StartMonitoring (beaconRegion);
 			locationManager.RequestState (beaconRegion);
@@ -56,7 +65,7 @@ namespace BeaconDemo
 
 		private void SetupTable ()
 		{
-			tableView = new UITableView (new RectangleF (0, TitleLabel.Frame.Bottom + 10, View.Bounds.Width, View.Bounds.Height - TitleLabel.Frame.Bottom + 10));
+			tableView = new UITableView (new RectangleF (0, TrackingButton.Frame.Bottom + 10, View.Bounds.Width, View.Bounds.Height - TrackingButton.Frame.Bottom + 10));
 			tableView.Source = tableSource = new BeaconTableSource (this);
 			tableView.Hidden = true;
 			LoadingSpinner.StartAnimating ();
@@ -64,7 +73,7 @@ namespace BeaconDemo
 			View.Add (tableView);
 		}
 
-		private void SetupBeaconTracking ()
+		private void SetupBeaconRanging ()
 		{
 			locationManager = new CLLocationManager ();
 			beacons = new List<Beacon> ();
@@ -118,6 +127,7 @@ namespace BeaconDemo
 						LoadingSpinner.Hidden = true;
 						SearchingLabel.Hidden = true;
 						tableView.Hidden = false;
+						TrackingButton.Hidden = false;
 						var existing = beacons.Find (x => x.Minor == b.Minor.DoubleValue);
 						if (existing == null) {
 							beacons.Add (new Beacon () {

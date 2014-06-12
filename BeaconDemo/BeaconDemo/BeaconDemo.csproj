@@ -112,6 +112,10 @@
     <Compile Include="BeaconCell.designer.cs">
       <DependentUpon>BeaconCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrackingViewController.cs" />
+    <Compile Include="TrackingViewController.designer.cs">
+      <DependentUpon>TrackingViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainStoryboard.storyboard" />
