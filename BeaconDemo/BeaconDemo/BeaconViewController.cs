@@ -20,6 +20,8 @@ namespace BeaconDemo
 		UITableView tableView;
 		BeaconTableSource tableSource;
 
+		public bool IsEditing = false;
+
 		public BeaconViewController (IntPtr handle) : base (handle)
 		{
 		}
@@ -33,11 +35,31 @@ namespace BeaconDemo
 
 			locationManager.StartMonitoring (beaconRegion);
 			locationManager.RequestState (beaconRegion);
+
+			NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.DidShowNotification, KeyboardUpNotification);
+			NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillHideNotification, KeyboardDownNotification);
 		}
 
-		private void SetupTable() {
+		public void KeyboardUpNotification (NSNotification notification)
+		{
+			var val = new NSValue (notification.UserInfo.ValueForKey (UIKeyboard.FrameBeginUserInfoKey).Handle);
+			RectangleF r = val.RectangleFValue;
+
+			tableView.ContentInset = new UIEdgeInsets (0, 0, r.Height + 20, 0);
+
+		}
+
+		public void KeyboardDownNotification (NSNotification notification)
+		{
+			tableView.ContentInset = UIEdgeInsets.Zero;
+		}
+
+		private void SetupTable ()
+		{
 			tableView = new UITableView (new RectangleF (0, TitleLabel.Frame.Bottom + 10, View.Bounds.Width, View.Bounds.Height - TitleLabel.Frame.Bottom + 10));
-			tableView.Source = tableSource = new BeaconTableSource ();
+			tableView.Source = tableSource = new BeaconTableSource (this);
+			tableView.Hidden = true;
+			LoadingSpinner.StartAnimating ();
 
 			View.Add (tableView);
 		}
@@ -93,13 +115,23 @@ namespace BeaconDemo
 			if (e.Beacons.Length > 0) {
 				foreach (var b in e.Beacons) {
 					if (b.Proximity != CLProximity.Unknown) {
+						LoadingSpinner.Hidden = true;
+						SearchingLabel.Hidden = true;
+						tableView.Hidden = false;
 						var existing = beacons.Find (x => x.Minor == b.Minor.DoubleValue);
 						if (existing == null) {
-							beacons.Add (new Beacon () { Minor = b.Minor.DoubleValue, Name = "", CurrentDistance = Math.Round(b.Accuracy, 2) });
-							tableSource.SetTableData (beacons);
-							tableView.ReloadData ();
+							beacons.Add (new Beacon () {
+								Minor = b.Minor.DoubleValue,
+								Name = "",
+								CurrentDistance = Math.Round (b.Accuracy, 2)
+							});
 						} else {
 							existing.CurrentDistance = Math.Round (b.Accuracy, 2);
+						}
+
+						if (!IsEditing) {
+							tableSource.SetTableData (beacons);
+							tableView.ReloadData ();
 						}
 					}
 				}

@@ -3,6 +3,7 @@ using System.Drawing;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using System.Diagnostics;
 
 namespace BeaconDemo
 {
@@ -20,19 +21,21 @@ namespace BeaconDemo
 			return (BeaconCell)Nib.Instantiate (null, null) [0];
 		}
 
-		public void UpdateCell(Beacon b) {
+		public void UpdateCell(Beacon b, BeaconViewController viewController) {
 			NameTextField.Text = b.Name;
 			IDLabel.Text = "ID: " + b.Minor;
 			DistanceLabel.Text = "Distance: " + b.CurrentDistance;
 
 			NameTextField.ShouldReturn += delegate {
 				NameTextField.ResignFirstResponder ();
+				b.Name = NameTextField.Text;
+				viewController.IsEditing = false;
 				return true;
 			};
-		}
 
-		public void Activate() {
-			NameTextField.BecomeFirstResponder ();
+			NameTextField.EditingDidBegin += (sender, e) => {
+				viewController.IsEditing = true;
+			};
 		}
 	}
 }

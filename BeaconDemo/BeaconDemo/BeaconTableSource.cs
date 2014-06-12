@@ -8,6 +8,11 @@ namespace BeaconDemo
 	public class BeaconTableSource : UITableViewSource
 	{
 		List<Beacon> beacons;
+		BeaconViewController viewController;
+
+		public BeaconTableSource (BeaconViewController viewController) {
+			this.viewController = viewController;
+		}
 
 		public override int RowsInSection (UITableView tableview, int section)
 		{
@@ -16,10 +21,7 @@ namespace BeaconDemo
 
 		public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 		{
-			var cell = tableView.CellAt (indexPath) as BeaconCell;
-			if (cell != null) {
-				cell.Activate ();
-			}
+			Console.WriteLine ("Row selected");
 		}
 
 		public override float GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
@@ -27,11 +29,16 @@ namespace BeaconDemo
 			return 111;
 		}
 
+		public override bool ShouldHighlightRow (UITableView tableView, NSIndexPath rowIndexPath)
+		{
+			return false;
+		}
+
 		public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 		{
 			BeaconCell cell = tableView.DequeueReusableCell (BeaconCell.Key) as BeaconCell ?? BeaconCell.Create();
 
-			cell.UpdateCell (beacons [indexPath.Row]);
+			cell.UpdateCell (beacons [indexPath.Row], viewController);
 
 			return cell;
 
