@@ -7,10 +7,13 @@ namespace BeaconDemo
 	public class Beacon
 	{
 		LimitedQueue<double> previousDistances;
+		const double tolerance = 0.2;
 
 		public double PreviousAverage;
 		public double Minor;
 		public string Name;
+		public DateTime MovementChangeTimestamp;
+		public Movement CurrentMovement;
 
 		public double CurrentDistance {
 			get { return previousDistances.Last (); }
@@ -19,6 +22,15 @@ namespace BeaconDemo
 					PreviousAverage = previousDistances.Average ();
 				}
 				previousDistances.Enqueue (value);
+				var newMovement = GetMovement(previousDistances.Average () - PreviousAverage);
+
+				if (CurrentMovement == Movement.None) {
+					CurrentMovement = newMovement;
+					MovementChangeTimestamp = DateTime.Now;
+				} else if (CurrentMovement != newMovement) {
+					CurrentMovement = newMovement;
+					MovementChangeTimestamp = DateTime.Now;
+				}
 			}
 		}
 
@@ -31,6 +43,23 @@ namespace BeaconDemo
 		{
 			return previousDistances.Average ();
 		}
+
+		public Movement GetMovement(double diff) {
+			if (Math.Abs(diff) < tolerance) {
+				return Movement.Stationary;
+			} else if (diff > 0) {
+				return Movement.Away;
+			} else {
+				return Movement.Toward;
+			}
+		}
+	}
+
+	public enum Movement {
+		None,
+		Stationary,
+		Toward,
+		Away
 	}
 
 	public class LimitedQueue<T> : Queue<T>

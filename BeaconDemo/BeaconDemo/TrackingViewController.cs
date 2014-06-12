@@ -55,7 +55,7 @@ namespace BeaconDemo
 		public void SetLocationLabel() {
 			var closestBeacon = GetClosestBeacon ();
 			if (closestBeacon != null) {
-				LocationDesc.Text = "You are approximately " + closestBeacon.CurrentDistance + "m from " +  closestBeacon.Name;
+				LocationDesc.Text = "You are closest to " + closestBeacon.Name + " (Approximately " + closestBeacon.CurrentDistance + "m away)";
 			}
 		}
 
@@ -63,14 +63,22 @@ namespace BeaconDemo
 			var builder = new StringBuilder ();
 
 			foreach(var b in beacons) {
-				var diff = b.GetAverage () - b.PreviousAverage;
-				if (Math.Abs(diff) < tolerance) {
-					builder.Append (b.Name + " - Stationary\n");
-				} else if (diff > 0) {
-					builder.Append (b.Name + " - Moving away\n");
-				} else {
-					builder.Append (b.Name + " - Moving toward\n");
+				var movement = b.GetMovement(b.GetAverage () - b.PreviousAverage);
+
+				switch(movement) {
+				case Movement.Stationary:
+					builder.Append ("Stationary at ");
+					break;
+				case Movement.Toward:
+					builder.Append ("Moving toward ");
+					break;
+				case Movement.Away:
+					builder.Append ("Moving away from ");
+					break;
 				}
+
+				var timeDiff = DateTime.Now - b.MovementChangeTimestamp;
+				builder.Append(b.Name + " for " + timeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n\n");
 			}
 
 			MovementDesc.Text = builder.ToString ();
