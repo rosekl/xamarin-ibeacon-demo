@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using MonoTouch.CoreLocation;
 
 namespace BeaconDemo
 {
@@ -13,6 +14,25 @@ namespace BeaconDemo
 		public double Minor;
 		public DateTime MovementChangeTimestamp;
 		public Movement CurrentMovement;
+		public DateTime ProximityChangeTimestamp;
+
+		CLProximity proximity;
+		public CLProximity Proximity {
+			get {
+				return proximity;
+			}
+			set {
+				if (value > proximity) {
+					ProximityChangeTimestamp = DateTime.Now;
+					CurrentMovement = Movement.Away;
+				} else if (value < proximity) {
+					ProximityChangeTimestamp = DateTime.Now;
+					CurrentMovement = Movement.Toward;
+				}
+
+				proximity = value;
+			}
+		}
 
 		private string name;
 		public string Name {
@@ -39,9 +59,13 @@ namespace BeaconDemo
 			}
 		}
 
+
+
 		public Beacon ()
 		{
 			previousDistances = new LimitedQueue<double> (5);
+			MovementChangeTimestamp = DateTime.Now;
+			ProximityChangeTimestamp = DateTime.Now;
 		}
 
 		public double GetAverage ()

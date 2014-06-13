@@ -42,6 +42,7 @@ namespace BeaconDemo
 						Beacon listBeacon = beacons.Find (x => x.Minor == b.Minor.DoubleValue);
 						if (listBeacon != null) {
 							listBeacon.CurrentDistance = Math.Round (b.Accuracy, 2);
+							listBeacon.Proximity = b.Proximity;
 						}
 					}
 				}
@@ -67,7 +68,7 @@ namespace BeaconDemo
 
 				switch(movement) {
 				case Movement.Stationary:
-					builder.Append ("Stationary at ");
+					builder.Append("Stationary relative to ");
 					break;
 				case Movement.Toward:
 					builder.Append ("Moving toward ");
@@ -79,6 +80,21 @@ namespace BeaconDemo
 
 				var timeDiff = DateTime.Now - b.MovementChangeTimestamp;
 				builder.Append(b.Name + " for " + timeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n\n");
+
+				switch(b.Proximity) {
+				case CLProximity.Immediate:
+					builder.Append ("Very close to ");
+					break;
+				case CLProximity.Near:
+					builder.Append ("Near ");
+					break;
+				case CLProximity.Far:
+					builder.Append ("Far from ");
+					break;
+				}
+
+				var pTimeDiff = DateTime.Now - b.ProximityChangeTimestamp;
+				builder.Append(b.Name + " for " +pTimeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n\n");
 			}
 
 			MovementDesc.Text = builder.ToString ();
