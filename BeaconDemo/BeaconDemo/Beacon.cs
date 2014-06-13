@@ -11,9 +11,14 @@ namespace BeaconDemo
 
 		public double PreviousAverage;
 		public double Minor;
-		public string Name;
 		public DateTime MovementChangeTimestamp;
 		public Movement CurrentMovement;
+
+		private string name;
+		public string Name {
+			get {return string.IsNullOrEmpty(name) ? Minor.ToString () : name;}
+			set {name = value;}
+		}
 
 		public double CurrentDistance {
 			get { return previousDistances.Last (); }

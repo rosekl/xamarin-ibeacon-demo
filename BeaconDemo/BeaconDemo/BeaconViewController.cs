@@ -35,10 +35,10 @@ namespace BeaconDemo
 			TrackingButton.Hidden = true;
 
 			TrackingButton.TouchUpInside += (sender, e) => {
-				var trackingController = Storyboard.InstantiateViewController("TrackingViewController") as TrackingViewController;
-				NavigationController.PushViewController(trackingController, true);
+				var trackingController = Storyboard.InstantiateViewController ("TrackingViewController") as TrackingViewController;
+				NavigationController.PushViewController (trackingController, true);
 
-				trackingController.SetupTracking(beacons, locationManager);
+				trackingController.SetupTracking (beacons, locationManager);
 				locationManager.DidRangeBeacons -= HandleDidRangeBeacons;
 			};
 
@@ -103,6 +103,8 @@ namespace BeaconDemo
 			Console.WriteLine ("Region entered: " + e.Region.Identifier);
 			if (e.Region.Identifier.Equals (beaconId)) {
 				locationManager.StartRangingBeacons (beaconRegion);
+				var notification = new UILocalNotification { AlertBody = "Beacons are in range" };
+				UIApplication.SharedApplication.PresentLocationNotificationNow(notification);
 			}
 		}
 
@@ -112,6 +114,7 @@ namespace BeaconDemo
 				if (e.State == CLRegionState.Inside) {
 					Console.WriteLine ("Inside beacon region");
 					locationManager.StartRangingBeacons (beaconRegion);
+
 				} else if (e.State == CLRegionState.Outside) {
 					Console.WriteLine ("Outside beacon region");
 					locationManager.StopRangingBeacons (beaconRegion);
