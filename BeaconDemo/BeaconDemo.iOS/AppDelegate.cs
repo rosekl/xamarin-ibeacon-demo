@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using Xamarin.Forms;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using BeaconDemo.Shared;
 
 namespace BeaconDemo
 {
@@ -11,13 +11,19 @@ namespace BeaconDemo
 	// User Interface of the application, as well as listening (and optionally responding) to
 	// application events from iOS.
 	[Register ("AppDelegate")]
-	public partial class AppDelegate : UIApplicationDelegate
+	public class AppDelegate : UIApplicationDelegate
 	{
-		// class-level declarations
-		
-		public override UIWindow Window {
-			get;
-			set;
+		UIWindow window;
+
+		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
+		{
+			Forms.Init ();
+
+			window = new UIWindow (UIScreen.MainScreen.Bounds);
+			window.RootViewController = App.GetMainPage ().CreateViewController ();
+			window.MakeKeyAndVisible ();
+
+			return true;
 		}
 		
 		// This method is invoked when the application is about to move from active to inactive state.

@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeaconDemo", "BeaconDemo\BeaconDemo.csproj", "{51457C9E-D24D-4D31-84C5-BC815F52E35F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeaconDemo.iOS", "BeaconDemo.iOS\BeaconDemo.iOS.csproj", "{51457C9E-D24D-4D31-84C5-BC815F52E35F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeaconDemo.Android", "BeaconDemo.Android\BeaconDemo.Android.csproj", "{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BeaconDemo.Shared", "BeaconDemo.Shared\BeaconDemo.Shared.shproj", "{A35BA32C-88E2-4C4D-8951-029C979A908A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,19 +18,43 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.AppStore|iPhone.Build.0 = AppStore|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.AppStore|iPhone.Build.0 = AppStore|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhone.Build.0 = Debug|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhone.Build.0 = Debug|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhone.ActiveCfg = Release|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhone.ActiveCfg = Release|iPhone
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhone.Build.0 = Release|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhone.Build.0 = Release|iPhone
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{51457C9E-D24D-4D31-84C5-BC815F52E35F}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Release|iPhone.Build.0 = Release|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = BeaconDemo\BeaconDemo.csproj
+		StartupItem = BeaconDemo\BeaconDemo.iOS.csproj
 	EndGlobalSection
 EndGlobal
