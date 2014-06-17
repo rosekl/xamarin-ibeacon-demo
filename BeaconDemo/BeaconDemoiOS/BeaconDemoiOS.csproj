@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{51457C9E-D24D-4D31-84C5-BC815F52E35F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>BeaconDemo.iOS</RootNamespace>
+    <RootNamespace>BeaconDemoiOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>BeaconDemo</AssemblyName>
   </PropertyGroup>
@@ -113,25 +113,10 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="BeaconViewController.cs" />
-    <Compile Include="BeaconViewController.designer.cs">
-      <DependentUpon>BeaconViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Beacon.cs" />
-    <Compile Include="BeaconTableSource.cs" />
-    <Compile Include="BeaconCell.cs" />
-    <Compile Include="BeaconCell.designer.cs">
-      <DependentUpon>BeaconCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="TrackingViewController.cs" />
-    <Compile Include="TrackingViewController.designer.cs">
-      <DependentUpon>TrackingViewController.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <InterfaceDefinition Include="MainStoryboard.storyboard" />
-    <InterfaceDefinition Include="BeaconCell.xib" />
-  </ItemGroup>
-  <Import Project="..\BeaconDemo.Shared\BeaconDemo.Shared.projitems" Label="Shared" Condition="Exists('..\BeaconDemo.Shared\BeaconDemo.Shared.projitems')" />
+  <Import Project="..\BeaconDemo\BeaconDemo.projitems" Label="Shared" Condition="Exists('..\BeaconDemo\BeaconDemo.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="../packages/Xamarin.Forms.1.1.0.6201/build/portable-win+net45+wp80+MonoAndroid10+MonoTouch10/Xamarin.Forms.targets" />
 </Project>

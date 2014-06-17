@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using BeaconDemo.Shared;
+using BeaconDemo;
 
-namespace BeaconDemo
+namespace BeaconDemoiOS
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the
 	// User Interface of the application, as well as listening (and optionally responding) to

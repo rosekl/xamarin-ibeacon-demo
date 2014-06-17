@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MonoTouch.CoreLocation;
 
-namespace BeaconDemo
+namespace BeaconDemoiOS
 {
 	public class Beacon
 	{

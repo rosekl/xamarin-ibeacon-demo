@@ -7,9 +7,9 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
-namespace BeaconDemo.Android
+namespace BeaconDemoAndroid
 {
-	[Activity (Label = "BeaconDemo.Android", MainLauncher = true)]
+	[Activity (Label = "BeaconDemoAndroid", MainLauncher = true)]
 	public class MainActivity : Activity
 	{
 		int count = 1;

@@ -6,7 +6,7 @@
     <SharedGUID>{A35BA32C-88E2-4C4D-8951-029C979A908A}</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>BeaconDemo.Shared</Import_RootNamespace>
+    <Import_RootNamespace>BeaconDemo</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />

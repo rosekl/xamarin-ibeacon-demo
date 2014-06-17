@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace BeaconDemo.Shared
+namespace BeaconDemo
 {
 	public class MainPage : ContentPage
 	{
