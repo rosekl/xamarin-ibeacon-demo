@@ -69,7 +69,7 @@ namespace BeaconDemo
 		protected override void OnAppearing ()
 		{
 			base.OnAppearing ();
-			var timer = new Timer (2000);
+			var timer = new Timer (1000);
 			timer.Elapsed += OnTimerElapsed;
 			timer.Start ();
 		}
@@ -84,10 +84,8 @@ namespace BeaconDemo
 				} else if (list.Count == 0) {
 					Content = searchingLayout;
 				} else if (list.Count > 0) {
-					beaconCollection.Clear();
-					foreach (var b in list) {
-						beaconCollection.Add(b);
-					}
+					listView.ItemsSource = null;
+					listView.ItemsSource = list;
 					Content = tableLayout;
 				}
 			});
