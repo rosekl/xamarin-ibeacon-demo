@@ -15,7 +15,11 @@ namespace BeaconDemoAndroid
 		}
 
 		public List<BeaconItem> GetAvailableBeacons() {
-			return null;
+			return new List<BeaconItem> {
+				new BeaconItem { Name = "Android1", Minor = "1233", CurrentDistance = 0.5 },
+				new BeaconItem { Name = "Android2", Minor = "1234", CurrentDistance = 0.2 },
+				new BeaconItem { Name = "Android3", Minor = "1235", CurrentDistance = 12.5 },
+			};
 		}
 	}
 }

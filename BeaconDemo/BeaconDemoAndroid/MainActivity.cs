@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Forms;
 
 using Android.App;
 using Android.Content;
@@ -6,11 +7,13 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using BeaconDemo;
+using Xamarin.Forms.Platform.Android;
 
 namespace BeaconDemoAndroid
 {
 	[Activity (Label = "BeaconDemoAndroid", MainLauncher = true)]
-	public class MainActivity : Activity
+	public class MainActivity : AndroidActivity
 	{
 		int count = 1;
 
@@ -18,16 +21,9 @@ namespace BeaconDemoAndroid
 		{
 			base.OnCreate (bundle);
 
-			// Set our view from the "main" layout resource
-			SetContentView (Resource.Layout.Main);
+			Forms.Init (this, bundle);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button> (Resource.Id.myButton);
-			
-			button.Click += delegate {
-				button.Text = string.Format ("{0} clicks!", count++);
-			};
+			SetPage (App.GetMainPage ());
 		}
 	}
 }
