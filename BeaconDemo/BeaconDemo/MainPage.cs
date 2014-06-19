@@ -38,7 +38,6 @@ namespace BeaconDemo
 			};
 
 			trackingButton.Clicked += (sender, args) => {
-				trackingPage.SetBeaconData(beaconCollection);
 				Navigation.PushAsync(trackingPage);
 			};
 

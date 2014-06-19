@@ -141,13 +141,10 @@ namespace BeaconDemoiOS
 				break;
 			}
 
-			if (p > dest.Proximity) {
+			if (p > dest.Proximity || p < dest.Proximity) {
+				Console.WriteLine ("RESETTING PROXIMITY TIMESTAMP[" + dest.Name + "]: " + p + " => " + dest.Proximity);
 				dest.ProximityChangeTimestamp = DateTime.Now;
-				dest.CurrentMovement = Movement.Away;
-			} else if (p < dest.Proximity) {
-				dest.ProximityChangeTimestamp = DateTime.Now;
-				dest.CurrentMovement = Movement.Toward;
-			}
+			} 
 
 			dest.Proximity = p;
 		}

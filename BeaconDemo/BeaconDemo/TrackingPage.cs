@@ -3,12 +3,14 @@ using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Timers;
+using System.Collections.Generic;
 
 namespace BeaconDemo
 {
 	public class TrackingPage : ContentPage
 	{
-		ObservableCollection<BeaconItem> beaconCollection;
+		List<BeaconItem> beaconCollection;
 
 		Label locationLabel;
 		Label directionLabel;
@@ -37,13 +39,28 @@ namespace BeaconDemo
 			};
 
 			Content = layout;
+
+			var timer = new Timer (1000);
+			timer.Elapsed += OnTimerElapsed;
+			timer.Start ();
 		}
 
-		public void SetBeaconData (ObservableCollection<BeaconItem> beaconCollection)
+		public void SetBeaconData (List<BeaconItem> beaconCollection)
 		{
 			this.beaconCollection = beaconCollection;
 			SetLocationLabel ();
 			SetDirectionLabel ();
+		}
+
+		public void OnTimerElapsed(object o, ElapsedEventArgs e) {
+
+			Device.BeginInvokeOnMainThread (() => {
+				var list = DependencyService.Get<BeaconLocater>().GetAvailableBeacons();
+
+				if (list != null) {
+					SetBeaconData(list);
+				}
+			});
 		}
 
 		public void SetLocationLabel ()
@@ -98,7 +115,7 @@ namespace BeaconDemo
 				}
 
 				var pTimeDiff = DateTime.Now - b.ProximityChangeTimestamp;
-				builder.Append("for " + pTimeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n-------------------\n");
+				builder.Append("for " + pTimeDiff.Minutes + " minutes and " + pTimeDiff.Seconds + " seconds\n-------------------\n");
 			}
 
 			directionLabel.Text = builder.ToString ();
