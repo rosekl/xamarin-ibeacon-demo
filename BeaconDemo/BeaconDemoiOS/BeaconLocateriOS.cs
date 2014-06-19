@@ -142,7 +142,6 @@ namespace BeaconDemoiOS
 			}
 
 			if (p > dest.Proximity || p < dest.Proximity) {
-				Console.WriteLine ("RESETTING PROXIMITY TIMESTAMP[" + dest.Name + "]: " + p + " => " + dest.Proximity);
 				dest.ProximityChangeTimestamp = DateTime.Now;
 			} 
 
