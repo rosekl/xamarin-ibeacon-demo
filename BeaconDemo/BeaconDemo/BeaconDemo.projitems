@@ -14,5 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BeaconCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BeaconItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BeaconLocater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TrackingPage.cs" />
   </ItemGroup>
 </Project>

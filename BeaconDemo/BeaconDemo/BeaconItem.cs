@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Xamarin.Forms;
-using MonoTouch.CoreLocation;
 using System.Collections.Generic;
 
 namespace BeaconDemo
@@ -17,24 +16,7 @@ namespace BeaconDemo
 		public DateTime ProximityChangeTimestamp;
 
 		public string Minor {get; set;}
-
-		CLProximity proximity;
-		public CLProximity Proximity {
-			get {
-				return proximity;
-			}
-			set {
-				if (value > proximity) {
-					ProximityChangeTimestamp = DateTime.Now;
-					CurrentMovement = Movement.Away;
-				} else if (value < proximity) {
-					ProximityChangeTimestamp = DateTime.Now;
-					CurrentMovement = Movement.Toward;
-				}
-
-				proximity = value;
-			}
-		}
+		public Proximity Proximity {get; set;}
 
 		private string name;
 		public string Name {
@@ -94,6 +76,13 @@ namespace BeaconDemo
 		Away
 	}
 
+	public enum Proximity {
+		Unknown,
+		Immediate,
+		Near,
+		Far
+	}
+
 	public class LimitedQueue<T> : Queue<T>
 	{
 		private int limit = -1;
@@ -117,8 +106,5 @@ namespace BeaconDemo
 			base.Enqueue (item);
 		}
 	}
-
-
-
 }
 

@@ -15,10 +15,13 @@ namespace BeaconDemo
 		StackLayout tableLayout;
 		StackLayout searchingLayout;
 		ObservableCollection<BeaconItem> beaconCollection;
+		TrackingPage trackingPage;
 
 		public MainPage ()
 		{
 			Title = "Available Beacons";
+
+			trackingPage = new TrackingPage ();
 
 			listView = new ListView {
 				RowHeight = 100,
@@ -28,6 +31,21 @@ namespace BeaconDemo
 			beaconLocater = DependencyService.Get<BeaconLocater> ();
 			beaconCollection = new ObservableCollection<BeaconItem> ();
 			listView.ItemsSource = beaconCollection;
+
+			var trackingButton = new Button {
+				Text = "Start Tracking",
+				HorizontalOptions = LayoutOptions.Center
+			};
+
+			trackingButton.Clicked += (sender, args) => {
+				trackingPage.SetBeaconData(beaconCollection);
+				Navigation.PushAsync(trackingPage);
+			};
+
+			tableLayout = new StackLayout {
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				Children = {trackingButton, listView}
+			};
 
 			searchingLabel = new Label {
 				Text = "Searching for beacons",
@@ -44,11 +62,6 @@ namespace BeaconDemo
 				VerticalOptions = LayoutOptions.Center,
 				HorizontalOptions = LayoutOptions.Center,
 				Children = {spinner, searchingLabel}
-			};
-
-			tableLayout = new StackLayout {
-				VerticalOptions = LayoutOptions.FillAndExpand,
-				Children = {listView}
 			};
 
 			Content = searchingLayout;

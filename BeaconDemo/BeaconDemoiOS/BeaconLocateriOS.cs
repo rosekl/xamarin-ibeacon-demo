@@ -2,11 +2,9 @@
 using BeaconDemo;
 using Xamarin.Forms;
 using BeaconDemoiOS;
-using System.Linq;
 using MonoTouch.CoreLocation;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 [assembly: Dependency (typeof(BeaconLocateriOS))]
@@ -108,20 +106,50 @@ namespace BeaconDemoiOS
 						for (int i=0; i<beacons.Count; i++) {
 							if (beacons[i].Minor.Equals(b.Minor.ToString())) {
 								beacons[i].CurrentDistance = Math.Round (b.Accuracy, 2);
+								SetProximity (b, beacons [i]);
 								exists = true;
 							}
 						}
 
 						if (!exists) {
-							beacons.Add (new BeaconItem {
+							var newBeacon = new BeaconItem {
 								Minor = b.Minor.ToString (),
 								Name = "",
 								CurrentDistance = Math.Round (b.Accuracy, 2)
-							});
+							};
+							SetProximity (b, newBeacon);
+							beacons.Add (newBeacon);
 						}
 					}
 				}
 			}
+		}
+
+		void SetProximity(CLBeacon source, BeaconItem dest) {
+
+			Proximity p = Proximity.Unknown;
+
+			switch(source.Proximity) {
+			case CLProximity.Immediate:
+				p = Proximity.Immediate;
+				break;
+			case CLProximity.Near:
+				p = Proximity.Near;
+				break;
+			case CLProximity.Far:
+				p = Proximity.Far;
+				break;
+			}
+
+			if (p > dest.Proximity) {
+				dest.ProximityChangeTimestamp = DateTime.Now;
+				dest.CurrentMovement = Movement.Away;
+			} else if (p < dest.Proximity) {
+				dest.ProximityChangeTimestamp = DateTime.Now;
+				dest.CurrentMovement = Movement.Toward;
+			}
+
+			dest.Proximity = p;
 		}
 	}
 }
