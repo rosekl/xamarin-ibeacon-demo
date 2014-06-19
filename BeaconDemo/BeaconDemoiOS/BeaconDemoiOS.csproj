@@ -112,9 +112,8 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="BeaconViewController.cs" />
-    <Compile Include="Beacon.cs" />
     <Compile Include="TrackingViewController.cs" />
+    <Compile Include="BeaconLocateriOS.cs" />
   </ItemGroup>
   <Import Project="..\BeaconDemo\BeaconDemo.projitems" Label="Shared" Condition="Exists('..\BeaconDemo\BeaconDemo.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -5,6 +5,7 @@ namespace BeaconDemo
 {
 	public class BeaconCell : ViewCell
 	{
+
 		public BeaconCell ()
 		{
 
@@ -13,14 +14,15 @@ namespace BeaconDemo
 				Text = "Name: "
 			};
 
-			var nameContent = new Label {
-				YAlign = TextAlignment.Center
+			var nameContent = new Entry {
+				HorizontalOptions = LayoutOptions.FillAndExpand
 			};
-			nameContent.SetBinding (Label.TextProperty, "Name");
+			nameContent.SetBinding (Entry.TextProperty, "Name");
 
 			var nameLayout = new StackLayout {
 				Orientation = StackOrientation.Horizontal,
 				Padding = new Thickness (5, 0, 5, 0),
+				HorizontalOptions = LayoutOptions.FillAndExpand,
 				Children = {nameLabel, nameContent}
 			};
 
@@ -32,7 +34,7 @@ namespace BeaconDemo
 			var idContent = new Label {
 				YAlign = TextAlignment.Center
 			};
-			idContent.SetBinding (Label.TextProperty, "MinorId");
+			idContent.SetBinding (Label.TextProperty, "Minor");
 
 			var idLayout = new StackLayout {
 				Orientation = StackOrientation.Horizontal,
@@ -48,7 +50,7 @@ namespace BeaconDemo
 			var distanceContent = new Label {
 				YAlign = TextAlignment.Center
 			};
-			distanceContent.SetBinding (Label.TextProperty, "Distance");
+			distanceContent.SetBinding (Label.TextProperty, "DistanceString");
 
 			var distanceLayout = new StackLayout {
 				Orientation = StackOrientation.Horizontal,
