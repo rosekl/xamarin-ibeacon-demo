@@ -53,12 +53,7 @@ namespace BeaconDemoiOS
 //			}
 //		}
 //
-//		public void SetLocationLabel() {
-//			var closestBeacon = GetClosestBeacon ();
-//			if (closestBeacon != null) {
-//				LocationDesc.Text = "You are closest to " + closestBeacon.Name + " (Approximately " + closestBeacon.CurrentDistance + "m away)";
-//			}
-//		}
+
 //
 //		public void SetDirectionLabel() {
 //			var builder = new StringBuilder ();
@@ -100,12 +95,5 @@ namespace BeaconDemoiOS
 //			MovementDesc.Text = builder.ToString ();
 //		}
 //
-//		public Beacon GetClosestBeacon() {
-//			if (beacons == null || beacons.Count == 0) {
-//				return null;
-//			}
-//
-//			return beacons.OrderBy (b => b.CurrentDistance).First();
-//		}
 	}
 }

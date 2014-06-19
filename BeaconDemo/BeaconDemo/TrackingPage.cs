@@ -1,6 +1,8 @@
 ﻿using System;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 
 namespace BeaconDemo
 {
@@ -13,14 +15,21 @@ namespace BeaconDemo
 
 		public TrackingPage ()
 		{
+			Title = "Tracking";
+
+			Padding = new Thickness (20, 20, 20, 20);
+
 			locationLabel = new Label {
 				Text = "Location",
-				HorizontalOptions = LayoutOptions.CenterAndExpand
+				HorizontalOptions = LayoutOptions.CenterAndExpand,
+
 			};
 
 			directionLabel = new Label {
 				Text = "Direction",
-				HorizontalOptions = LayoutOptions.CenterAndExpand
+				HorizontalOptions = LayoutOptions.CenterAndExpand,
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				Font = Font.SystemFontOfSize(14)
 			};
 
 			var layout = new StackLayout {
@@ -30,8 +39,69 @@ namespace BeaconDemo
 			Content = layout;
 		}
 
-		public void SetBeaconData(ObservableCollection<BeaconItem> beaconCollection) {
+		public void SetBeaconData (ObservableCollection<BeaconItem> beaconCollection)
+		{
 			this.beaconCollection = beaconCollection;
+			SetLocationLabel ();
+			SetDirectionLabel ();
+		}
+
+		public void SetLocationLabel ()
+		{
+			var closestBeacon = GetClosestBeacon ();
+			if (closestBeacon != null) {
+				locationLabel.Text = "You are closest to " + closestBeacon.Name + " (Approximately " + closestBeacon.CurrentDistance + "m away)";
+			}
+		}
+
+		public BeaconItem GetClosestBeacon ()
+		{
+			if (beaconCollection == null || beaconCollection.Count == 0) {
+				return null;
+			}
+
+			return beaconCollection.OrderBy (b => b.CurrentDistance).First ();
+		}
+
+		public void SetDirectionLabel() {
+			var builder = new StringBuilder ();
+
+			foreach(var b in beaconCollection) {
+				builder.Append (b.Name + ":\n");
+				var movement = b.GetMovement(b.GetAverage () - b.PreviousAverage);
+
+				switch(movement) {
+				case Movement.Stationary:
+					builder.Append("Stationary ");
+					break;
+				case Movement.Toward:
+					builder.Append ("Moving toward ");
+					break;
+				case Movement.Away:
+					builder.Append ("Moving away ");
+					break;
+				}
+
+				var timeDiff = DateTime.Now - b.MovementChangeTimestamp;
+				builder.Append("for " + timeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n");
+
+				switch(b.Proximity) {
+				case Proximity.Immediate:
+					builder.Append ("Very close to ");
+					break;
+				case Proximity.Near:
+					builder.Append ("Near ");
+					break;
+				case Proximity.Far:
+					builder.Append ("Far from ");
+					break;
+				}
+
+				var pTimeDiff = DateTime.Now - b.ProximityChangeTimestamp;
+				builder.Append("for " + pTimeDiff.Minutes + " minutes and " + timeDiff.Seconds + " seconds\n-------------------\n");
+			}
+
+			directionLabel.Text = builder.ToString ();
 		}
 	}
 }
