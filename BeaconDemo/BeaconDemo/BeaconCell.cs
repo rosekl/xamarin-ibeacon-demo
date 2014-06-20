@@ -19,6 +19,13 @@ namespace BeaconDemo
 			};
 			nameContent.SetBinding (Entry.TextProperty, "Name");
 
+			nameContent.Focused += delegate {
+				DependencyService.Get<BeaconLocater> ().PauseTracking ();
+			};
+			nameContent.Unfocused += delegate {
+				DependencyService.Get<BeaconLocater> ().ResumeTracking();
+			};
+
 			var nameLayout = new StackLayout {
 				Orientation = StackOrientation.Horizontal,
 				Padding = new Thickness (5, 0, 5, 0),

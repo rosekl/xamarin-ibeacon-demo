@@ -19,32 +19,28 @@ namespace BeaconDemoiOS
 		NSUuid beaconUUID;
 		CLBeaconRegion beaconRegion;
 		List<BeaconItem> beacons;
-		bool keyboardActive;
+		bool paused;
 
 		public BeaconLocateriOS ()
 		{
 			SetupBeaconRanging ();
 			locationManager.StartMonitoring (beaconRegion);
 			locationManager.RequestState (beaconRegion);
-
-
-			NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.DidShowNotification, KeyboardUpNotification);
-			NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.DidHideNotification, KeyboardDownNotification);
 		}
 
-		public void KeyboardUpNotification (NSNotification n)
+		public void PauseTracking ()
 		{
-			keyboardActive = true;
+			paused = true;
 		}
 
-		public void KeyboardDownNotification (NSNotification n)
+		public void ResumeTracking ()
 		{
-			keyboardActive = false;
+			paused = false;
 		}
 
 		public List<BeaconItem> GetAvailableBeacons ()
 		{
-			return !keyboardActive ? beacons : null;
+			return !paused ? beacons : null;
 		}
 
 		private void SetupBeaconRanging ()
@@ -103,9 +99,9 @@ namespace BeaconDemoiOS
 					if (b.Proximity != CLProximity.Unknown) {
 
 						var exists = false;
-						for (int i=0; i<beacons.Count; i++) {
-							if (beacons[i].Minor.Equals(b.Minor.ToString())) {
-								beacons[i].CurrentDistance = Math.Round (b.Accuracy, 2);
+						for (int i = 0; i < beacons.Count; i++) {
+							if (beacons [i].Minor.Equals (b.Minor.ToString ())) {
+								beacons [i].CurrentDistance = Math.Round (b.Accuracy, 2);
 								SetProximity (b, beacons [i]);
 								exists = true;
 							}
@@ -125,11 +121,12 @@ namespace BeaconDemoiOS
 			}
 		}
 
-		void SetProximity(CLBeacon source, BeaconItem dest) {
+		void SetProximity (CLBeacon source, BeaconItem dest)
+		{
 
 			Proximity p = Proximity.Unknown;
 
-			switch(source.Proximity) {
+			switch (source.Proximity) {
 			case CLProximity.Immediate:
 				p = Proximity.Immediate;
 				break;

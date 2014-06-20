@@ -7,6 +7,8 @@ namespace BeaconDemo
 	public interface BeaconLocater
 	{
 		List<BeaconItem> GetAvailableBeacons();
+		void PauseTracking();
+		void ResumeTracking();
 	}
 }
 

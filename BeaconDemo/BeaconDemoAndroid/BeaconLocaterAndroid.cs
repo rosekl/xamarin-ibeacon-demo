@@ -22,11 +22,19 @@ namespace BeaconDemoAndroid
 		Region _monitoringRegion;
 		Region _rangingRegion;
 		Context context;
+		bool paused;
 		List<BeaconItem> beacons;
 
 		public BeaconLocaterAndroid ()
 		{
 			beacons = new List<BeaconItem> ();
+
+			//for testing
+//			beacons = new List<BeaconItem> {
+//				new BeaconItem { Name = "Android1", Minor = "1233", CurrentDistance = 0.5 },
+//				new BeaconItem { Name = "Android2", Minor = "1234", CurrentDistance = 0.2 },
+//				new BeaconItem { Name = "Android3", Minor = "1235", CurrentDistance = 12.5 },
+//			};
 
 			context = Application.Context;
 
@@ -39,28 +47,19 @@ namespace BeaconDemoAndroid
 
 			_iBeaconManager.Bind (this);
 
-			_monitorNotifier.EnterRegionComplete += EnteredRegion;
-			_monitorNotifier.ExitRegionComplete += ExitedRegion;
-
 			_rangeNotifier.DidRangeBeaconsInRegionComplete += RangingBeaconsInRegion;
 		}
 
 		public List<BeaconItem> GetAvailableBeacons() {
-			return new List<BeaconItem> {
-				new BeaconItem { Name = "Android1", Minor = "1233", CurrentDistance = 0.5 },
-				new BeaconItem { Name = "Android2", Minor = "1234", CurrentDistance = 0.2 },
-				new BeaconItem { Name = "Android3", Minor = "1235", CurrentDistance = 12.5 },
-			};
-
-//			return beacons;
+			return !paused ? beacons : null;
 		}
 
-		void EnteredRegion(object sender, MonitorEventArgs e)
-		{
+		public void PauseTracking() {
+			paused = true;
 		}
 
-		void ExitedRegion(object sender, MonitorEventArgs e)
-		{
+		public void ResumeTracking() {
+			paused = false;
 		}
 
 		void RangingBeaconsInRegion(object sender, RangeEventArgs e)
