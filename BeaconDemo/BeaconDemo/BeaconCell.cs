@@ -20,10 +20,10 @@ namespace BeaconDemo
 			nameContent.SetBinding (Entry.TextProperty, "Name");
 
 			nameContent.Focused += delegate {
-				DependencyService.Get<BeaconLocater> ().PauseTracking ();
+				DependencyService.Get<IBeaconLocater> ().PauseTracking ();
 			};
 			nameContent.Unfocused += delegate {
-				DependencyService.Get<BeaconLocater> ().ResumeTracking();
+				DependencyService.Get<IBeaconLocater> ().ResumeTracking();
 			};
 
 			var nameLayout = new StackLayout {

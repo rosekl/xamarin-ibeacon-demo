@@ -43,6 +43,6 @@ Global
 		{ABF1FC85-4058-4D3E-AEB4-C7642CC63970}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = BeaconDemoAndroid\BeaconDemoAndroid.csproj
+		StartupItem = BeaconDemoiOS\BeaconDemoiOS.csproj
 	EndGlobalSection
 EndGlobal

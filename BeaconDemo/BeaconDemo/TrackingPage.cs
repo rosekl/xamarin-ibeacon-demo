@@ -15,6 +15,8 @@ namespace BeaconDemo
 		Label locationLabel;
 		Label directionLabel;
 
+		BeaconItem closestBeacon;
+
 		public TrackingPage ()
 		{
 			Title = "Tracking";
@@ -34,11 +36,16 @@ namespace BeaconDemo
 				Font = Font.SystemFontOfSize(14)
 			};
 
+
 			var layout = new StackLayout {
 				Children = { locationLabel, directionLabel }
 			};
 
-			Content = layout;
+			var scroll = new ScrollView () {
+				Content = layout
+			};
+
+			Content = scroll;
 
 			var timer = new Timer (1000);
 			timer.Elapsed += OnTimerElapsed;
@@ -55,7 +62,7 @@ namespace BeaconDemo
 		public void OnTimerElapsed(object o, ElapsedEventArgs e) {
 
 			Device.BeginInvokeOnMainThread (() => {
-				var list = DependencyService.Get<BeaconLocater>().GetAvailableBeacons();
+				var list = DependencyService.Get<IBeaconLocater>().GetAvailableBeacons();
 
 				if (list != null) {
 					SetBeaconData(list);
@@ -65,7 +72,7 @@ namespace BeaconDemo
 
 		public void SetLocationLabel ()
 		{
-			var closestBeacon = GetClosestBeacon ();
+			closestBeacon = GetClosestBeacon();
 			if (closestBeacon != null) {
 				locationLabel.Text = "You are closest to " + closestBeacon.Name + " (Approximately " + closestBeacon.CurrentDistance + "m away)";
 			}

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace BeaconDemo
 {
-	public interface BeaconLocater
+	public interface IBeaconLocater
 	{
 		List<BeaconItem> GetAvailableBeacons();
 		void PauseTracking();

@@ -6,12 +6,13 @@ using Android.App;
 using RadiusNetworks.IBeaconAndroid;
 using BeaconDemo;
 using Android.Content;
+using Android.Support.V4.App;
 
 [assembly: Dependency (typeof (BeaconLocaterAndroid))]
 
 namespace BeaconDemoAndroid
 {
-	public class BeaconLocaterAndroid : Java.Lang.Object, BeaconLocater, IBeaconConsumer
+	public class BeaconLocaterAndroid : Java.Lang.Object, IBeaconLocater, IBeaconConsumer
 	{
 		readonly string uuid = "8deefbb9-f738-4297-8040-96668bb44281";
 		readonly string beaconId = "OfficeBeacon";

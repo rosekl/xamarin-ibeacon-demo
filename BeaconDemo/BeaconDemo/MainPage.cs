@@ -11,7 +11,7 @@ namespace BeaconDemo
 		ListView listView;
 		Label searchingLabel;
 		ActivityIndicator spinner;
-		BeaconLocater beaconLocater;
+		IBeaconLocater beaconLocater;
 		StackLayout tableLayout;
 		StackLayout searchingLayout;
 		ObservableCollection<BeaconItem> beaconCollection;
@@ -28,7 +28,7 @@ namespace BeaconDemo
 			};
 			listView.ItemTemplate = new DataTemplate (typeof(BeaconCell));
 
-			beaconLocater = DependencyService.Get<BeaconLocater> ();
+			beaconLocater = DependencyService.Get<IBeaconLocater> ();
 			beaconCollection = new ObservableCollection<BeaconItem> ();
 			listView.ItemsSource = beaconCollection;
 

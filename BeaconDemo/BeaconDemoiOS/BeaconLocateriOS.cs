@@ -11,21 +11,25 @@ using System.Collections.Generic;
 
 namespace BeaconDemoiOS
 {
-	public class BeaconLocateriOS : BeaconLocater
+	public class BeaconLocateriOS : IBeaconLocater
 	{
 		CLLocationManager locationManager;
-		readonly string uuid = "8deefbb9-f738-4297-8040-96668bb44281";
-		readonly string beaconId = "OfficeBeacon";
-		NSUuid beaconUUID;
-		CLBeaconRegion beaconRegion;
+		readonly string roximityUuid = "8deefbb9-f738-4297-8040-96668bb44281";
+		readonly string estimoteUuid = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
+		readonly string roximityBeaconId = "RoximityBeacon";
+		readonly string estimoteBeaconId = "EstimoteBeacon";
+		CLBeaconRegion rBeaconRegion;
+		CLBeaconRegion eBeaconRegion;
 		List<BeaconItem> beacons;
 		bool paused;
 
 		public BeaconLocateriOS ()
 		{
 			SetupBeaconRanging ();
-			locationManager.StartMonitoring (beaconRegion);
-			locationManager.RequestState (beaconRegion);
+			locationManager.StartMonitoring (rBeaconRegion);
+			locationManager.RequestState (rBeaconRegion);
+			locationManager.StartMonitoring (eBeaconRegion);
+			locationManager.RequestState (eBeaconRegion);
 		}
 
 		public void PauseTracking ()
@@ -48,12 +52,19 @@ namespace BeaconDemoiOS
 			locationManager = new CLLocationManager ();
 			beacons = new List<BeaconItem> ();
 
-			beaconUUID = new NSUuid (uuid);
-			beaconRegion = new CLBeaconRegion (beaconUUID, beaconId);
+			var rUuid = new NSUuid (roximityUuid);
+			rBeaconRegion = new CLBeaconRegion (rUuid, roximityBeaconId);
 
-			beaconRegion.NotifyEntryStateOnDisplay = true;
-			beaconRegion.NotifyOnEntry = true;
-			beaconRegion.NotifyOnExit = true;
+			var eUuid = new NSUuid (estimoteUuid);
+			eBeaconRegion = new CLBeaconRegion (eUuid, estimoteBeaconId);
+
+			rBeaconRegion.NotifyEntryStateOnDisplay = true;
+			rBeaconRegion.NotifyOnEntry = true;
+			rBeaconRegion.NotifyOnExit = true;
+
+			eBeaconRegion.NotifyEntryStateOnDisplay = true;
+			eBeaconRegion.NotifyOnEntry = true;
+			eBeaconRegion.NotifyOnExit = true;
 
 			locationManager.RegionEntered += HandleRegionEntered;
 			locationManager.RegionLeft += HandleRegionLeft;
@@ -63,16 +74,22 @@ namespace BeaconDemoiOS
 
 		void HandleRegionLeft (object sender, CLRegionEventArgs e)
 		{
-			if (e.Region.Identifier.Equals (beaconId)) {
-				locationManager.StopRangingBeacons (beaconRegion);
+			if (e.Region.Identifier.Equals (roximityBeaconId)) {
+				locationManager.StopRangingBeacons (rBeaconRegion);
+			} else if (e.Region.Identifier.Equals (estimoteBeaconId)) {
+				locationManager.StopRangingBeacons (eBeaconRegion);
 			}
 		}
 
 		void HandleRegionEntered (object sender, CLRegionEventArgs e)
 		{
 			Console.WriteLine ("Region entered: " + e.Region.Identifier);
-			if (e.Region.Identifier.Equals (beaconId)) {
-				locationManager.StartRangingBeacons (beaconRegion);
+			if (e.Region.Identifier.Equals (roximityBeaconId)) {
+				locationManager.StartRangingBeacons (rBeaconRegion);
+				var notification = new UILocalNotification { AlertBody = "Beacons are in range" };
+				UIApplication.SharedApplication.PresentLocationNotificationNow (notification);
+			} else if (e.Region.Identifier.Equals (estimoteBeaconId)) {
+				locationManager.StartRangingBeacons (eBeaconRegion);
 				var notification = new UILocalNotification { AlertBody = "Beacons are in range" };
 				UIApplication.SharedApplication.PresentLocationNotificationNow (notification);
 			}
@@ -80,14 +97,23 @@ namespace BeaconDemoiOS
 
 		void HandleDidDetermineState (object sender, CLRegionStateDeterminedEventArgs e)
 		{
-			if (e.Region.Identifier.Equals (beaconId)) {
+			if (e.Region.Identifier.Equals (roximityBeaconId)) {
 				if (e.State == CLRegionState.Inside) {
-					Console.WriteLine ("Inside beacon region");
-					locationManager.StartRangingBeacons (beaconRegion);
+					Console.WriteLine ("Inside roximity beacon region [{0}]", e.Region.Identifier);
+					locationManager.StartRangingBeacons (rBeaconRegion);
 		
 				} else if (e.State == CLRegionState.Outside) {
-					Console.WriteLine ("Outside beacon region");
-					locationManager.StopRangingBeacons (beaconRegion);
+					Console.WriteLine ("Outside roximity beacon region");
+					locationManager.StopRangingBeacons (rBeaconRegion);
+				}
+			} else if (e.Region.Identifier.Equals (estimoteBeaconId)) {
+				if (e.State == CLRegionState.Inside) {
+					Console.WriteLine ("Inside estimote beacon region [{0}]", e.Region.Identifier);
+					locationManager.StartRangingBeacons (eBeaconRegion);
+
+				} else if (e.State == CLRegionState.Outside) {
+					Console.WriteLine ("Outside estimote beacon region");
+					locationManager.StopRangingBeacons (eBeaconRegion);
 				}
 			}
 		}
@@ -96,8 +122,9 @@ namespace BeaconDemoiOS
 		{
 			if (e.Beacons.Length > 0) {
 				foreach (var b in e.Beacons) {
-					if (b.Proximity != CLProximity.Unknown) {
 
+					if (b.Proximity != CLProximity.Unknown) {
+						Console.WriteLine ("UUID: {0} | Major: {1} | Minor: {2} | Accuracy: {3} | Proximity: {4} | RSSI: {5}", b.ProximityUuid, b.Major, b.Minor, b.Accuracy, b.Proximity, b.Rssi);
 						var exists = false;
 						for (int i = 0; i < beacons.Count; i++) {
 							if (beacons [i].Minor.Equals (b.Minor.ToString ())) {
